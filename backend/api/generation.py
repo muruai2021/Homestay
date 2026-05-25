@@ -54,14 +54,15 @@ async def _call_generate_stream(agent_id: str, prompt: str, task_description: st
             stream=True
         )
         
-        full_content = ""
+        full_content_list = []
         try:
             async for chunk in response:
                 if chunk.choices[0].delta.content:
                     content = chunk.choices[0].delta.content
-                    full_content += content
+                    full_content_list.append(content)
                     yield content
-            
+
+            full_content = "".join(full_content_list)
             # 保存对话记录
             session_mgr.add_message("user", prompt)
             session_mgr.add_message("assistant", full_content)
@@ -151,13 +152,15 @@ async def chat(request: ChatRequest):
                 stream=True
             )
             
-            full_content = ""
+            full_content_list = []
             try:
                 async for chunk in response:
                     if chunk.choices[0].delta.content:
                         content = chunk.choices[0].delta.content
-                        full_content += content
+                        full_content_list.append(content)
                         yield content
+
+                full_content = "".join(full_content_list)
                 
                 session_mgr.add_message("user", request.message)
                 session_mgr.add_message("assistant", full_content)

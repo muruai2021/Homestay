@@ -22,16 +22,35 @@ GREETING_PATTERNS = [
     r"^(你好|您好|hi|hey|hello|嗨|哈喽|在吗|帮忙)\s*$",
 ]
 
-# Prompt 注入模式
+# Prompt 注入模式 - 增强版
 INJECTION_PATTERNS = [
+    # English patterns
     "ignore previous instructions",
     "disregard your orders",
+    "forget all previous",
+    "new instructions",
+    "[system prompt]",
+    "override your programming",
+    "disregard your guidelines",
+    "you are now",
+    "act as",
+    "pretend you are",
+    "developer mode",
+    "jailbreak",
+    # Chinese patterns
     "忘掉所有",
     "你现在是",
     "你是一个",
-    "forget all",
-    "new instructions",
-    "[system prompt]",
+    "忽略之前",
+    "无视之前",
+    "请扮演",
+    "你现在扮演",
+    "系统提示",
+    "忽略系统",
+    "打破规则",
+    "绕过限制",
+    "请忽略",
+    "不要遵循",
 ]
 
 
@@ -172,15 +191,16 @@ async def agent_chat(request: AgentChatRequest):
 
         # 返回流式响应
         async def generate():
-            full_content = ""
+            full_content_list = []
             try:
                 async for chunk in response:
                     if chunk.choices[0].delta.content:
                         content = chunk.choices[0].delta.content
-                        full_content += content
+                        full_content_list.append(content)
                         yield content
 
                 # 保存对话记录
+                full_content = "".join(full_content_list)
                 session_mgr.add_message("user", user_input)
                 session_mgr.add_message("assistant", full_content)
 
@@ -239,21 +259,23 @@ async def agent_generate(request: AgentGenerateRequest):
 
         # 返回流式响应
         async def generate():
-            full_content = ""
+            full_content_list = []
             try:
                 async for chunk in response:
                     if chunk.choices[0].delta.content:
                         content = chunk.choices[0].delta.content
-                        full_content += content
+                        full_content_list.append(content)
                         yield content
 
                 # 保存对话记录
+                full_content = "".join(full_content_list)
                 session_mgr.add_message("user", request.prompt)
                 session_mgr.add_message("assistant", full_content)
 
                 # 生成模式：自动保存文件
                 file_mgr = FileManager(agent_name)
-                timestamp = session_mgr._load_sessions_file().split("最近更新：")[-1].strip().split()[0]
+                import time
+                timestamp = time.strftime("%Y%m%d_%H%M%S")
                 filename = f"{request.prompt[:20]}_{timestamp}.md"
                 file_mgr.write_file(filename, full_content)
 
