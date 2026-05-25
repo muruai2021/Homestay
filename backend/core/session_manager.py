@@ -13,9 +13,8 @@ WORKSPACE_DIR = BASE_DIR / "workspace"
 class SessionManager:
     """会话管理器 - 支持多会话、JSON格式完整记录"""
 
-    # 批量写入配置
-    _pending_writes: Dict[str, tuple] = {}  # session_id -> (session_data, timestamp)
-    _write_interval = 1.0  # 批量写入间隔（秒）
+    # 批量写入间隔（秒）
+    _default_write_interval = 1.0
 
     def __init__(self, agent_name: str, session_id: str = None):
         self.agent_name = agent_name
@@ -23,7 +22,10 @@ class SessionManager:
         self.sessions_dir = self.agent_workspace / "sessions"
         self.session_id = session_id or str(uuid.uuid4())
         self._ensure_workspace()
-        self._last_write_time = {}  # session_id -> last flush time
+        # 实例级批量写入配置
+        self._pending_writes: Dict[str, tuple] = {}  # session_id -> (session_data, timestamp)
+        self._write_interval = self._default_write_interval
+        self._last_write_time: Dict[str, float] = {}  # session_id -> last flush time
     
     def _ensure_workspace(self):
         """确保工作空间和会话目录存在"""
