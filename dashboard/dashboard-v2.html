@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>猩伙伴民宿运营看板（数据统计于2026年4月1日至今）</title>
+    <style>
+        /* ========================================
+           乔布斯美学 × 爱马仕橙
+           超极简主义 + 极细线体设计系统
+           ======================================== */
+
+        :root {
+            /* 字体系统 - 极细线体 */
+            --font-stack: 'PingFang SC', 'SF Pro Display', 'Helvetica Neue', 'Noto Sans SC', 'Source Han Sans SC', -apple-system, sans-serif;
+            --font-weight-thin: 100;
+            --font-weight-ultralight: 200;
+            --font-weight-light: 300;
+            --font-weight-regular: 400;
+            --font-weight-medium: 500;
+
+            /* 爱马仕橙 - 优雅橙 */
+            --orange: #E86C30;
+            --orange-light: #F5984F;
+            --orange-pale: #FDF0E6;
+            --orange-glow: rgba(232, 108, 48, 0.08);
+
+            /* 乔布斯灰 - 极简中性色 */
+            --bg: #FAFAFA;
+            --bg-white: #FFFFFF;
+            --bg-subtle: #F5F5F7;
+            --text: #1D1D1F;
+            --text-secondary: #86868B;
+            --text-tertiary: #AEAEB2;
+            --border: rgba(0, 0, 0, 0.06);
+            --border-subtle: rgba(0, 0, 0, 0.03);
+
+            /* 图表色系 - 高雅低调 */
+            --chart-revenue: #B8A99A;
+            --chart-revenue-fill: rgba(184, 169, 154, 0.15);
+            --chart-orders: #9B8AA6;
+            --chart-orders-fill: rgba(155, 138, 166, 0.15);
+            --chart-occupancy: #7A9BB0;
+            --chart-occupancy-fill: rgba(122, 155, 176, 0.15);
+            --chart-cancel: #C49A9B;
+            --chart-cancel-fill: rgba(196, 154, 155, 0.15);
+
+            /* 状态色 - 优雅内敛 */
+            --green: #7BAE7F;
+            --green-bg: rgba(123, 174, 127, 0.12);
+            --red: #C47A7D;
+            --red-bg: rgba(196, 122, 125, 0.12);
+            --yellow: #D4B896;
+            --yellow-bg: rgba(212, 184, 150, 0.15);
+
+            /* 房态日历色 - 沉稳温润 */
+            --room-occupied: #9587B0;
+            --room-occupied-bg: rgba(149, 135, 176, 0.2);
+            --room-reserved: #C9B896;
+            --room-reserved-bg: rgba(201, 184, 150, 0.25);
+
+            /* 阴影 - 极微妙 */
+            --shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.02);
+            --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04), 0 8px 32px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.06), 0 16px 48px rgba(0, 0, 0, 0.04);
+
+            /* 间距韵律 */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+
+            /* 圆角 */
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-xl: 20px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-stack);
+            font-weight: var(--font-weight-light);
+            background: var(--bg);
+            min-height: 100vh;
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            letter-spacing: -0.01em;
+        }
+
+        /* ===== 顶部导航 ===== */
+        .header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: saturate(200%) blur(28px);
+            -webkit-backdrop-filter: saturate(200%) blur(28px);
+            border-bottom: 0.5px solid var(--border);
+            padding: 0 var(--space-xl);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 52px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Logo */
+        .logo {
+            font-size: 15px;
+            font-weight: var(--font-weight-ultralight);
+            color: var(--text);
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        .logo-mark {
+            width: 6px;
+            height: 6px;
+            background: var(--orange);
+            border-radius: 50%;
+            margin-right: 2px;
+        }
+        .logo span {
+            font-weight: var(--font-weight-light);
+            color: var(--text-secondary);
+            font-size: 11px;
+            letter-spacing: 0.02em;
+        }
+
+        /* 标签页 */
+        .tabs { display: flex; gap: var(--space-xs); }
+        .tab {
+            padding: 16px 18px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-weight: var(--font-weight-light);
+            color: var(--text-secondary);
+            border-bottom: 1.5px solid transparent;
+            transition: all 0.2s ease;
+            letter-spacing: 0.01em;
+        }
+        .tab:hover { color: var(--text); }
+        .tab.active {
+            color: var(--orange);
+            border-bottom-color: var(--orange);
+            font-weight: var(--font-weight-medium);
+        }
+
+        /* 刷新按钮 */
+        .refresh-btn {
+            padding: 8px 16px;
+            background: var(--orange);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: var(--font-weight-medium);
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(232, 108, 48, 0.25);
+        }
+        .refresh-btn:hover {
+            background: #D55A25;
+            box-shadow: 0 4px 16px rgba(232, 108, 48, 0.35);
+            transform: translateY(-1px);
+        }
+        .refresh-btn:active { transform: translateY(0); }
+
+        #lastUpdated {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            font-weight: var(--font-weight-light);
+            margin-left: var(--space-md);
+        }
+
+        /* ===== 主内容区 ===== */
+        .main {
+            padding: var(--space-lg) var(--space-xl);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .view { display: none; }
+        .view.active { display: block; }
+
+        /* ===== 统计卡片 ===== */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+        .stat-card {
+            background: var(--bg-white);
+            padding: var(--space-lg) var(--space-md);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+            border: 0.5px solid var(--border-subtle);
+            transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+            position: relative;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--orange), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .stat-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-3px);
+        }
+        .stat-card:hover::before { opacity: 1; }
+        .stat-card .label {
+            color: var(--text-tertiary);
+            font-size: 10px;
+            margin-bottom: var(--space-sm);
+            font-weight: var(--font-weight-light);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .stat-card .value {
+            font-size: 26px;
+            font-weight: var(--font-weight-ultralight);
+            color: var(--text);
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+        .stat-card .value.green { color: var(--green); }
+        .stat-card .value.red { color: var(--red); }
+        .stat-card .value.orange { color: var(--orange); }
+
+        /* ===== 图表行 ===== */
+        .charts-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+        .charts-row.four-col { grid-template-columns: repeat(4, 1fr); }
+
+        .chart-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-card);
+            border: 0.5px solid var(--border-subtle);
+            transition: all 0.3s ease;
+        }
+        .chart-card:hover { box-shadow: var(--shadow-hover); }
+        .chart-card h3 {
+            margin: 0 0 var(--space-md) 0;
+            font-size: 12px;
+            font-weight: var(--font-weight-medium);
+            color: var(--text);
+            letter-spacing: 0.02em;
+            padding-bottom: var(--space-sm);
+            border-bottom: 0.5px solid var(--border);
+        }
+        .chart-card > div { width: 100%; min-height: 100px; }
+
+        /* ===== 订单表格 ===== */
+        .table-container {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            border: 0.5px solid var(--border-subtle);
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th {
+            background: var(--bg-subtle);
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: var(--font-weight-medium);
+            color: var(--text-secondary);
+            font-size: 10px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            border-bottom: 0.5px solid var(--border);
+        }
+        td {
+            padding: 16px;
+            border-bottom: 0.5px solid var(--border-subtle);
+            color: var(--text);
+            font-size: 12px;
+            font-weight: var(--font-weight-light);
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background: var(--orange-glow); }
+
+        /* 状态标签 */
+        .status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: var(--font-weight-medium);
+            letter-spacing: 0.03em;
+        }
+        .status.accepted {
+            background: var(--green-bg);
+            color: #248A3D;
+        }
+        .status.cancelled {
+            background: var(--red-bg);
+            color: #D32F2F;
+        }
+
+        /* 筛选栏 */
+        .filter-bar {
+            display: flex;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+        .filter-bar select {
+            padding: 10px 14px;
+            border: 0.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            font-family: inherit;
+            font-weight: var(--font-weight-light);
+            background: var(--bg-white);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-bar select:hover { border-color: var(--orange); }
+        .filter-bar select:focus {
+            outline: none;
+            border-color: var(--orange);
+            box-shadow: 0 0 0 3px var(--orange-pale);
+        }
+
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-xs);
+            margin-top: var(--space-lg);
+        }
+        .pagination button {
+            padding: 8px 14px;
+            border: 0.5px solid var(--border);
+            background: var(--bg-white);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: var(--font-weight-light);
+            color: var(--text);
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .pagination button:hover { border-color: var(--orange); color: var(--orange); }
+        .pagination button.active { background: var(--orange); color: white; border-color: var(--orange); }
+        .pagination button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* ===== 房态日历 ===== */
+        .calendar-controls { display: flex; gap: var(--space-sm); margin-bottom: var(--space-md); }
+        .calendar-controls button {
+            padding: 10px 20px;
+            border: 0.5px solid var(--border);
+            background: var(--bg-white);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: var(--font-weight-light);
+            font-family: inherit;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+        .calendar-controls button:hover { border-color: var(--orange); color: var(--orange); }
+        .calendar-controls button.active {
+            background: var(--orange);
+            color: white;
+            border-color: var(--orange);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .calendar-container {
+            overflow-x: auto;
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+            padding: var(--space-md);
+            border: 0.5px solid var(--border-subtle);
+        }
+        .calendar-container table { font-size: 10px; border-collapse: collapse; }
+
+        .calendar-container thead th {
+            padding: 8px 4px;
+            text-align: center;
+            min-width: 32px;
+            font-weight: var(--font-weight-medium);
+            color: var(--text-secondary);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            background: var(--bg-subtle);
+            border: 0.5px solid #E8E8ED;
+        }
+        .calendar-container thead th.room-col {
+            position: sticky; left: 0; z-index: 20;
+            min-width: 140px;
+            background: var(--bg-subtle);
+            border: 0.5px solid #E8E8ED;
+            text-align: left;
+            padding-left: 12px;
+        }
+
+        .calendar-container tbody td {
+            padding: 2px;
+            text-align: center;
+            min-width: 32px;
+            height: 36px;
+            border: 0.5px solid #E8E8ED;
+            vertical-align: middle;
+            background: var(--bg);
+        }
+        .calendar-container tbody td.room-col {
+            text-align: left;
+            padding-left: 12px;
+            font-weight: var(--font-weight-medium);
+            color: var(--text);
+            background: var(--bg-white);
+            position: sticky; left: 0; z-index: 5;
+            border: 0.5px solid #E8E8ED;
+            font-size: 11px;
+        }
+
+        .day-cell {
+            padding: 2px;
+            min-width: 26px;
+            height: 34px;
+            display: table-cell;
+            text-align: center;
+            vertical-align: middle;
+            transition: all 0.15s ease;
+            border-radius: 4px;
+            margin: 1px;
+            box-sizing: border-box;
+        }
+        .day-cell:hover { background: rgba(0,0,0,0.03); }
+        .day-cell.occupied {
+            background: var(--room-occupied);
+            color: white;
+            font-weight: var(--font-weight-medium);
+            box-shadow: 0 1px 4px rgba(149, 135, 176, 0.3);
+        }
+        .day-cell.reserved {
+            background: var(--room-reserved);
+            color: #4A4235;
+            font-weight: var(--font-weight-medium);
+            box-shadow: 0 1px 4px rgba(201, 184, 150, 0.3);
+        }
+        .day-cell .price {
+            font-size: 8px;
+            font-weight: var(--font-weight-medium);
+            display: block;
+        }
+
+        .calendar-container tfoot td {
+            background: var(--orange-pale);
+            font-weight: var(--font-weight-medium);
+            padding: 8px 4px;
+            text-align: center;
+            font-size: 9px;
+            color: var(--orange);
+            border: 0.5px solid #E8E8ED;
+        }
+        .calendar-container tfoot td.room-col {
+            background: var(--orange-pale);
+            text-align: left;
+            padding-left: 12px;
+            color: var(--orange);
+        }
+
+        .legend {
+            display: flex;
+            gap: var(--space-lg);
+            margin-top: var(--space-lg);
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-weight: var(--font-weight-light);
+            padding: var(--space-md) var(--space-lg);
+            background: var(--bg-subtle);
+            border-radius: var(--radius-md);
+        }
+        .legend-item { display: flex; align-items: center; gap: var(--space-sm); }
+        .legend-color { width: 14px; height: 14px; border-radius: 3px; }
+        .legend-color.occupied { background: var(--room-occupied); }
+        .legend-color.reserved { background: var(--room-reserved); }
+        .legend-color.empty { background: var(--bg); border: 0.5px solid var(--border); }
+
+        /* 加载状态 */
+        .loading { text-align: center; padding: 60px; color: var(--text-secondary); font-size: 13px; }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 1200px) {
+            .stats { grid-template-columns: repeat(3, 1fr); }
+            .charts-row { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .main { padding: var(--space-md); }
+            .header { padding: 0 var(--space-md); }
+            .stats { grid-template-columns: repeat(2, 1fr); gap: var(--space-sm); }
+            .charts-row { grid-template-columns: 1fr; }
+            .tabs { gap: 0; }
+            .tab { padding: 12px 10px; font-size: 11px; }
+            #lastUpdated { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-mark"></span>
+                猩伙伴民宿运营看板
+                <span>（数据统计于2026年4月1日至今）</span>
+            </div>
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('dashboard')">经营看板</button>
+                <button class="tab" onclick="switchTab('orders')">订单一览表</button>
+                <button class="tab" onclick="switchTab('calendar')">房态日历</button>
+            </div>
+            <button class="refresh-btn" onclick="window.location.reload()">刷新页面</button>
+            <span id="lastUpdated">加载中...</span>
+        </div>
+    </div>
+    
+    <div class="main">
+        <!-- 经营看板 -->
+        <div class="view active" id="dashboardView">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="label">当日订单</div>
+                    <div class="value" id="todayOrders">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">当日入住</div>
+                    <div class="value green" id="todayCheckin">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">本周订单</div>
+                    <div class="value" id="weekOrders">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">本周营收</div>
+                    <div class="value green" id="weekRevenue">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">本周入住率</div>
+                    <div class="value green" id="weekOccupancy">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">本周取消率</div>
+                    <div class="value red" id="weekCancelRate">-</div>
+                </div>
+            </div>
+            
+            <div class="charts-row">
+                <div class="chart-card">
+                    <h3>日均营收趋势 (元)</h3>
+                    <div id="revenueChart"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>日订单量趋势 (单)</h3>
+                    <div id="orderChart"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>入住率趋势 (%)</h3>
+                    <div id="occupancyChart"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>取消率趋势 (%)</h3>
+                    <div id="cancelChart"></div>
+                </div>
+            </div>
+            
+            <div class="charts-row">
+                <div class="chart-card">
+                    <h3>订单排行</h3>
+                    <div id="typeChart"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>房源销售排行</h3>
+                    <div id="topRoomChart"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 订单一览表 -->
+        <div class="view" id="ordersView">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="label">总订单</div>
+                    <div class="value" id="totalCount">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">已确认</div>
+                    <div class="value green" id="acceptedCount">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">已取消</div>
+                    <div class="value red" id="cancelledCount">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">预计收入</div>
+                    <div class="value green" id="totalRevenue">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">佣金合计</div>
+                    <div class="value orange" id="totalCommission">-</div>
+                </div>
+            </div>
+            
+            <div class="filter-bar">
+                <select id="statusFilter" onchange="renderOrders()">
+                    <option value="all">全部状态</option>
+                    <option value="accepted">已确认</option>
+                    <option value="cancelled">已取消</option>
+                </select>
+                <select id="roomFilter" onchange="renderOrders()">
+                    <option value="all">全部房源</option>
+                </select>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:50px">序号</th>
+                            <th style="width:100px">房客姓名</th>
+                            <th style="width:200px">房源名称</th>
+                            <th style="width:100px">入住日期</th>
+                            <th style="width:100px">退房日期</th>
+                            <th style="width:70px">天数</th>
+                            <th style="width:90px">房费</th>
+                            <th style="width:80px">佣金</th>
+                            <th style="width:90px">净房费</th>
+                            <th style="width:70px">状态</th>
+                            <th style="width:140px">下单时间</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderTable"></tbody>
+                </table>
+            </div>
+            
+            <div class="pagination" id="pagination"></div>
+        </div>
+        
+        <!-- 房态日历 -->
+        <div class="view" id="calendarView">
+            <div class="calendar-controls">
+                <button class="active" onclick="switchMonth(4)">4月</button>
+                <button onclick="switchMonth(5)">5月</button>
+                <button onclick="switchMonth(6)">6月</button>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="label">房源总数</div>
+                    <div class="value" id="roomCount">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">总订单</div>
+                    <div class="value" id="calOrderCount">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">已入住天数</div>
+                    <div class="value green" id="occupiedDays">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">预计收入</div>
+                    <div class="value green" id="calRevenue">-</div>
+                </div>
+            </div>
+            
+            <div class="calendar-container">
+                <table id="calendarTable"></table>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item"><div class="legend-color occupied"></div><span>已入住</span></div>
+                <div class="legend-item"><div class="legend-color reserved"></div><span>预订</span></div>
+                <div class="legend-item"><div class="legend-color empty"></div><span>空房</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ========================================
+    // 数据加载：支持外部JSON + 降级内嵌
+    // ========================================
+    let ordersData = [];
+    let lastUpdatedText = '加载中...';
+    async function getLastUpdatedText() {
+  try {
+    const res = await fetch('/dashboard/last_updated.txt?_=' + Date.now(), { cache: 'no-store' });
+    if (res.ok) return await res.text();
+  } catch(_){}
+  return new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' });
+}
+
+function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            
+            if (tab === 'dashboard') {
+                document.querySelector('.tab:nth-child(1)').classList.add('active');
+                document.getElementById('dashboardView').classList.add('active');
+            } else if (tab === 'orders') {
+                document.querySelector('.tab:nth-child(2)').classList.add('active');
+                document.getElementById('ordersView').classList.add('active');
+            } else if (tab === 'calendar') {
+                document.querySelector('.tab:nth-child(3)').classList.add('active');
+                document.getElementById('calendarView').classList.add('active');
+            }
+        }
+
+        // 数据加载函数
+        async function loadOrdersData() {
+            const statusEl = document.getElementById('lastUpdated');
+            const fallbackPath = '/dashboard/myhostex_all_orders.json';
+
+            try {
+                const res = await fetch(fallbackPath + '?t=' + Date.now(), { cache: 'no-store' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const json = await res.json();
+                if (!Array.isArray(json)) throw new Error('JSON格式错误');
+                ordersData = json;
+                lastUpdatedText = await getLastUpdatedText();
+                if (statusEl) statusEl.textContent = '最后更新：' + lastUpdatedText;
+                return true;
+            } catch (err) {
+                console.warn('⚠ 读取外部JSON失败，尝试加载内嵌数据...', err.message);
+                if (statusEl) statusEl.textContent = '⚠ 数据加载异常，请刷新页面或联系管理员';
+                return false;
+            }
+        }
+
+        // 加载数据
+        async function loadData() {
+            try {
+                // 从外部JSON加载数据（支持降级容错）
+                const ok = await loadOrdersData();
+                // ordersData = await response.json();
+                
+                // 过滤：只保留4月1日及以后的订单
+                ordersData = ordersData.filter(o => o.checkIn >= '2026-04-01');
+                
+                // 初始化房源筛选
+                const rooms = [...new Set(ordersData.map(o => o.room))].sort();
+                const roomSelect = document.getElementById('roomFilter');
+                roomSelect.innerHTML = '<option value="all">全部房源</option>';
+                rooms.forEach(room => {
+                    const opt = document.createElement('option');
+                    opt.value = room;
+                    opt.textContent = room;
+                    roomSelect.appendChild(opt);
+                });
+                
+                // 渲染各视图
+                renderOrders();
+                renderCalendar(currentMonth);
+                renderDashboard();
+                
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                alert('加载数据失败，请确保 myhostex_all_orders.json 文件存在');
+            }
+        }
+        
+
+        // 月份切换变量
+        let currentMonth = 4; // 默认4月
+
+        // 渲染订单表格
+        // 分页变量
+        let currentPage = 1;
+        const pageSize = 20;
+
+        function renderOrders() {
+            // 统计
+            const accepted = ordersData.filter(o => o.status === 'accepted');
+            document.getElementById('totalCount').textContent = ordersData.length;
+            document.getElementById('acceptedCount').textContent = accepted.length;
+            document.getElementById('cancelledCount').textContent = ordersData.filter(o => o.status === 'cancelled').length;
+            document.getElementById('totalRevenue').textContent = '¥' + accepted.reduce((s, o) => s + (o.netPrice || 0), 0).toLocaleString();
+            document.getElementById('totalCommission').textContent = '¥' + ordersData.reduce((s, o) => s + (o.commission || 0), 0).toLocaleString();
+            
+            // 筛选
+            const statusFilter = document.getElementById('statusFilter').value;
+            const roomFilter = document.getElementById('roomFilter').value;
+            let filtered = ordersData;
+            if (statusFilter !== 'all') filtered = filtered.filter(o => o.status === statusFilter);
+            if (roomFilter !== 'all') filtered = filtered.filter(o => o.room === roomFilter);
+            
+            // 分页
+            const totalPages = Math.ceil(filtered.length / pageSize);
+            currentPage = Math.min(currentPage, totalPages || 1);
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageOrders = filtered.slice(start, end);
+            
+            // 渲染表格
+            const tbody = document.getElementById('orderTable');
+            if (pageOrders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:#6b7280;padding:40px;">暂无数据</td></tr>';
+            } else {
+                tbody.innerHTML = pageOrders.map((order, i) => {
+                    const checkIn = new Date(order.checkIn);
+                    const checkOut = new Date(order.checkOut);
+                    const days = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)) || 1;
+                    return `
+                    <tr>
+                        <td>${start + i + 1}</td>
+                        <td>${order.guest}</td>
+                        <td>${order.room}</td>
+                        <td>${order.checkIn}</td>
+                        <td>${order.checkOut}</td>
+                        <td>${days}天</td>
+                        <td>¥${(order.price || 0).toLocaleString()}</td>
+                        <td>¥${(order.commission || 0).toLocaleString()}</td>
+                        <td>¥${(order.netPrice || 0).toLocaleString()}</td>
+                        <td><span class="status ${order.status}">${order.status === 'accepted' ? '已确认' : '已取消'}</span></td>
+                        <td>${order.orderTime}</td>
+                    </tr>`;
+                }).join('');
+            }
+            
+            // 分页控件
+            let paginationHtml = '';
+            paginationHtml += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">上一页</button>`;
+            for (let p = 1; p <= Math.min(5, totalPages); p++) {
+                paginationHtml += `<button class="${p === currentPage ? 'active' : ''}" onclick="changePage(${p})">${p}</button>`;
+            }
+            if (totalPages > 5) paginationHtml += `<button disabled>...</button>`;
+            paginationHtml += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">下一页</button>`;
+            document.getElementById('pagination').innerHTML = paginationHtml;
+        }
+        
+        function changePage(p) {
+            currentPage = p;
+            renderOrders();
+        }
+        
+        // 渲染经营看板
+        function renderDashboard() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const accepted = ordersData.filter(o => o.status === 'accepted');
+            const totalOrders = ordersData.filter(o => o.status === 'accepted' || o.status === 'cancelled');
+            
+            // 计算最近28天每日数据
+            const days = [];
+            for (let i = 27; i >= 0; i--) {
+                const d = new Date(today);
+                d.setDate(today.getDate() - i);
+                d.setHours(0, 0, 0, 0);
+                const dateStr = d.toISOString().substring(0, 10);
+                
+                const dayOrders = accepted.filter(o => o.checkIn === dateStr);
+                const dayAll = totalOrders.filter(o => o.checkIn === dateStr);
+                const dayCancelled = dayAll.filter(o => o.status === 'cancelled').length;
+                
+                // 计算入住率（当天在住的天数 / 总房源数）
+                let occupiedRooms = 0;
+                ordersData.filter(o => o.status === 'accepted').forEach(o => {
+                    const cIn = new Date(o.checkIn);
+                    const cOut = new Date(o.checkOut);
+                    cIn.setHours(0,0,0,0);
+                    cOut.setHours(0,0,0,0);
+                    if (d >= cIn && d < cOut) occupiedRooms++;
+                });
+                
+                const cancelRate = dayAll.length > 0 ? (dayCancelled / dayAll.length * 100) : 0;
+                
+                days.push({
+                    date: dateStr,
+                    label: d.toISOString().substring(5, 10),
+                    orders: dayOrders.length,
+                    revenue: dayOrders.reduce((s, o) => s + (o.price || 0), 0),
+                    occupiedRooms: occupiedRooms,
+                    occRate: (occupiedRooms / 34 * 100),
+                    cancelRate: cancelRate
+                });
+            }
+            
+            // 本周汇总（最近7天）
+            const thisWeek = days.slice(-7);
+            const thisWeekOrders = thisWeek.reduce((s, d) => s + d.orders, 0);
+            const thisWeekRevenue = thisWeek.reduce((s, d) => s + d.revenue, 0);
+            const thisWeekOccRate = thisWeek.reduce((s, d) => s + d.occRate, 0) / 7;
+            const thisWeekCancelRate = thisWeek.reduce((s, d) => s + d.cancelRate, 0) / 7;
+            
+            document.getElementById('weekOrders').textContent = thisWeekOrders;
+            document.getElementById('weekRevenue').textContent = '¥' + thisWeekRevenue.toLocaleString();
+            document.getElementById('weekOccupancy').textContent = thisWeekOccRate.toFixed(1) + '%';
+            document.getElementById('weekCancelRate').textContent = thisWeekCancelRate.toFixed(1) + '%';
+            
+            // 当日数据
+            const todayStr = today.toISOString().substring(0, 10);
+            const todayOrders = accepted.filter(o => o.checkIn === todayStr).length;
+            let todayCheckins = 0;
+            ordersData.filter(o => o.status === 'accepted').forEach(o => {
+                const cIn = new Date(o.checkIn);
+                const cOut = new Date(o.checkOut);
+                cIn.setHours(0,0,0,0);
+                cOut.setHours(0,0,0,0);
+                if (today >= cIn && today < cOut) todayCheckins++;
+            });
+            document.getElementById('todayOrders').textContent = todayOrders;
+            document.getElementById('todayCheckin').textContent = todayCheckins;
+            
+            // 渲染图表
+            renderCharts(days, accepted);
+        }
+        
+        // 绘制SVG柱状图
+        function drawBarChart(containerId, data, valueKey, color, unit) {
+            const container = document.getElementById(containerId);
+            const W = 700, H = 100;
+            const padding = { top: 10, right: 10, bottom: 30, left: 45 };
+            const chartW = W - padding.left - padding.right;
+            const chartH = H - padding.top - padding.bottom;
+            
+            const values = data.map(d => d[valueKey]);
+            const max = Math.max(...values, 1);
+            
+            const barW = Math.max(4, chartW / data.length - 2);
+            
+            // Y轴刻度（4个）
+            const yLabels = [];
+            for (let i = 0; i <= 3; i++) {
+                const val = (max * (3 - i) / 3);
+                const y = padding.top + (chartH * i / 3);
+                let label = '';
+                if (unit === '¥') {
+                    label = val >= 10000 ? (val/10000).toFixed(1) + '万' : val >= 1000 ? (val/1000).toFixed(0) + 'k' : val.toFixed(0);
+                } else if (unit === '%') {
+                    label = val.toFixed(0) + '%';
+                } else {
+                    label = val >= 1000 ? (val/1000).toFixed(0) + 'k' : val.toFixed(0);
+                }
+                yLabels.push(`<text x="${padding.left - 5}" y="${y + 4}" text-anchor="end" font-size="10" fill="#86868B">${label}</text>`);
+            }
+            
+            // X轴标签（每周一个）
+            const xLabels = data.map((d, i) => {
+                if (i % 7 === 0 || i === data.length - 1) {
+                    const x = padding.left + (i + 0.5) / data.length * chartW;
+                    return `<text x="${x}" y="${H - 8}" text-anchor="middle" font-size="10" fill="#86868B">${d.label}</text>`;
+                }
+                return '';
+            }).join('');
+            
+            // 柱状图（仅标注最高和最低值）
+            const maxVal = Math.max(...data.map(d => d[valueKey]));
+            const minVal = Math.min(...data.filter(d => d[valueKey] > 0).map(d => d[valueKey]));
+            const barsAndLabels = data.map((d, i) => {
+                const x = padding.left + (i / data.length) * chartW + 1;
+                const barH = Math.max(0, (d[valueKey] / max) * chartH);
+                const y = padding.top + chartH - barH;
+                // 仅最高和最低标注
+                let valLabel = '';
+                if (d[valueKey] > 0 && (d[valueKey] === maxVal || d[valueKey] === minVal)) {
+                    let label = '';
+                    if (unit === '¥') {
+                        label = d[valueKey] >= 10000 ? (d[valueKey]/10000).toFixed(1) + '万' : d[valueKey] >= 1000 ? (d[valueKey]/1000).toFixed(0) + 'k' : d[valueKey].toFixed(0);
+                    } else if (unit === '%') {
+                        label = d[valueKey].toFixed(0) + '%';
+                    } else {
+                        label = d[valueKey] >= 1000 ? (d[valueKey]/1000).toFixed(0) + 'k' : d[valueKey].toFixed(0);
+                    }
+                    valLabel = `<text x="${x + barW/2}" y="${y - 3}" text-anchor="middle" font-size="9" fill="#444444" font-weight="600">${label}</text>`;
+                }
+                return `<rect x="${x}" y="${y}" width="${barW}" height="${barH}" fill="${color}" rx="2" />${valLabel}`;
+            }).join('');
+            
+            const svg = `<svg width="700" height="100" viewBox="0 0 700 100" style="display:block;margin:auto;">
+                ${yLabels.join('')}
+                ${xLabels}
+                ${barsAndLabels}
+            </svg>`;
+            container.innerHTML = svg;
+        }
+        
+        function renderCharts(days, accepted) {
+            // 营收趋势
+            // 高雅灰调色系
+            drawBarChart('revenueChart', days, 'revenue', '#A69B8D', '¥');
+            drawBarChart('orderChart', days, 'orders', '#8E7B9B', '');
+            drawBarChart('occupancyChart', days, 'occRate', '#6B8FA3', '%');
+            drawBarChart('cancelChart', days, 'cancelRate', '#B08080', '%');
+            
+            // 房源类型占比
+            const types = {};
+            accepted.forEach(o => {
+                if (!o.room) return;
+                let t = '其他';
+                if (o.room.includes('保利')) t = '保利';
+                else if (o.room.includes('建发')) t = '建发';
+                else if (o.room.includes('北辰')) t = '北辰';
+                else if (o.room.includes('华远')) t = '华远';
+                else if (o.room.includes('珠江')) t = '珠江';
+                else if (o.room.includes('云顶')) t = '云顶';
+                if (!types[t]) types[t] = 0;
+                types[t] += o.price || 0;
+            });
+            
+            const total = Object.values(types).reduce((s, v) => s + v, 0);
+            const typeColors = { '建发': '#8B9DC3', '北辰': '#A8D8B9', '保利': '#C9B896', '华远': '#D4A5A5', '珠江': '#B8A4C9', '云顶': '#9DC3C9', '其他': '#B5B5B5' };
+            const typeHtml = Object.entries(types).sort((a, b) => b[1] - a[1]).map(([k, v]) => {
+                const pct = ((v / total) * 100).toFixed(1);
+                return `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-subtle);">
+                    <span style="display:flex;align-items:center;"><span style="width:12px;height:12px;background:${typeColors[k]||'#6b7280'};border-radius:2px;margin-right:8px;"></span>${k}</span>
+                    <span style="font-weight:600;">¥${(v/10000).toFixed(1)}万 (${pct}%)</span>
+                </div>`;
+            }).join('');
+            document.getElementById('typeChart').innerHTML = `<div style="padding:10px;">${typeHtml}</div>`;
+            
+            // Top10房源
+            const rooms = {};
+            accepted.forEach(o => {
+                if (!o.room) return;
+                if (!rooms[o.room]) rooms[o.room] = 0;
+                rooms[o.room] += o.price || 0;
+            });
+            
+            const topRooms = Object.entries(rooms).sort((a, b) => b[1] - a[1]).slice(0, 10);
+            const maxRev = topRooms[0]?.[1] || 1;
+            const topHtml = topRooms.map(([name, rev], i) => {
+                const pct = (rev / maxRev * 100).toFixed(0);
+                return `<div style="margin-bottom:10px;">
+                    <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+                        <span>${i + 1}. ${name.substring(0, 12)}</span>
+                        <span>¥${rev.toLocaleString()}</span>
+                    </div>
+                    <div style="height:16px;background:var(--bg-gray);border-radius:3px;overflow:hidden;">
+                        <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,#A69B8D,#BFB3A4);border-radius:3px;"></div>
+                    </div>
+                </div>`;
+            }).join('');
+            document.getElementById('topRoomChart').innerHTML = `<div style="padding:10px;max-height:230px;overflow-y:auto;">${topHtml}</div>`;
+        }
+        
+        // 渲染房态日历
+        function switchMonth(month) {
+            currentMonth = month;
+            document.querySelectorAll('.calendar-controls button').forEach((btn, i) => {
+                btn.classList.toggle('active', (month === 4 && i === 0) || (month === 5 && i === 1) || (month === 6 && i === 2));
+            });
+            renderCalendar(month);
+        }
+        
+        function renderCalendar(month) {
+            const year = 2026;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const daysInMonth = new Date(year, month, 0).getDate();
+            const monthStr = month.toString().padStart(2, '0');
+            
+            const rooms = [...new Set(ordersData.map(o => o.room))].sort();
+            
+            // 按房源和日期整理数据
+            const roomData = {};
+            const roomStats = {};
+            
+            rooms.forEach(room => {
+                roomData[room] = {};
+                roomStats[room] = { ordersData: 0, occupied: 0, reserved: 0, revenue: 0 };
+                for (let d = 1; d <= daysInMonth; d++) {
+                    roomData[room][d] = null;
+                }
+            });
+            
+            // 填充订单
+            ordersData.filter(o => o.status === 'accepted').forEach(order => {
+                const checkIn = new Date(order.checkIn);
+                const checkOut = new Date(order.checkOut);
+                const room = order.room;
+                
+                if (!roomData[room]) return;
+                
+                const totalDays = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+                const dailyPrice = Math.round(order.price / totalDays);
+                
+                roomStats[room].ordersData++;
+                roomStats[room].revenue += order.price || 0;
+                
+                for (let d = new Date(checkIn); d < checkOut; d.setDate(d.getDate() + 1)) {
+                    const dateStr = d.toISOString().substring(0, 10);
+                    const m = dateStr.substring(0, 7);
+                    if (m === `${year}-${monthStr}`) {
+                        const day = d.getDate();
+                        // 判断状态：已入住 或 预订
+                        const isOccupied = d < today; // 入住日期在今天之前 = 已入住
+                        roomData[room][day] = { price: dailyPrice, status: isOccupied ? 'occupied' : 'reserved' };
+                        if (isOccupied) {
+                            roomStats[room].occupied++;
+                        } else {
+                            roomStats[room].reserved++;
+                        }
+                    }
+                }
+            });
+            
+            // 更新统计
+            document.getElementById('roomCount').textContent = rooms.length;
+            document.getElementById('calOrderCount').textContent = Object.values(roomStats).reduce((s, r) => s + r.ordersData, 0);
+            document.getElementById('occupiedDays').textContent = Object.values(roomStats).reduce((s, r) => s + r.occupied + r.reserved, 0);
+            document.getElementById('calRevenue').textContent = '¥' + Object.values(roomStats).reduce((s, r) => s + r.revenue, 0).toLocaleString();
+            
+            // 生成表格
+            let html = `
+                <thead>
+                    <tr>
+                        <th class="room-col">房源名称</th>
+                        <th style="width:50px">订单</th>
+                        <th style="width:60px">入住天</th>
+                        <th style="width:80px">营收</th>
+                        ${Array.from({length: daysInMonth}, (_, i) => `<th style="min-width:36px">${i + 1}</th>`).join('')}
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+            
+            rooms.forEach(room => {
+                const stats = roomStats[room];
+                html += `<tr>
+                    <td class="room-col">${room}</td>
+                    <td>${stats.ordersData}</td>
+                    <td>${stats.occupied + stats.reserved}</td>
+                    <td>¥${stats.revenue.toLocaleString()}</td>
+                    ${Array.from({length: daysInMonth}, (_, i) => {
+                        const d = i + 1;
+                        const data = roomData[room][d];
+                        const statusClass = data ? (data.status === 'occupied' ? 'occupied' : 'reserved') : '';
+                        return `<td style="min-width:36px" class="day-cell ${statusClass}">${data ? '<span class="price">¥' + data.price + '</span>' : ''}</td>`;
+                    }).join('')}
+                </tr>`;
+            });
+            
+            // 底部合计
+            const totalOrders = Object.values(roomStats).reduce((s, r) => s + r.ordersData, 0);
+            const totalOccupied = Object.values(roomStats).reduce((s, r) => s + r.occupied + r.reserved, 0);
+            const totalRevenue = Object.values(roomStats).reduce((s, r) => s + r.revenue, 0);
+            html += `<tfoot><tr>
+                <td class="room-col">合计</td>
+                <td>${totalOrders}</td>
+                <td>${totalOccupied}</td>
+                <td>¥${totalRevenue.toLocaleString()}</td>
+                ${Array.from({length: daysInMonth}, (_, i) => {
+                    const d = i + 1;
+                    let dayRevenue = 0;
+                    let hasOccupied = false;
+                    let hasReserved = false;
+                    rooms.forEach(room => { 
+                        if (roomData[room][d]) {
+                            dayRevenue += roomData[room][d].price;
+                            if (roomData[room][d].status === 'occupied') hasOccupied = true;
+                            else hasReserved = true;
+                        }
+                    });
+                    const statusClass = hasOccupied ? 'occupied' : (hasReserved ? 'reserved' : '');
+                    return `<td style="min-width:36px" class="day-cell ${statusClass}">${dayRevenue > 0 ? '¥' + dayRevenue : ''}</td>`;
+                }).join('')}
+            </tr></tfoot></tbody>`;
+            
+            document.getElementById('calendarTable').innerHTML = html;
+        }
+        
+        // 页面加载时获取数据
+        loadData();
+    
+
+</script>
+</body>
+</html>
+
+

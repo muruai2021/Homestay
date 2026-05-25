@@ -1,0 +1,10 @@
+{
+  "agent_id": "企业运营知识库",
+  "name": "企业运营知识库",
+  "description": "企业运营知识库，支持上传文件（PDF/Word/TXT）自动转换为Markdown存档",
+  "enabled": true,
+  "enable_search": true,
+  "enable_file_ops": true,
+  "enable_upload": true,
+  "upload_formats": [".pdf", ".docx", ".doc", ".txt", ".md"]
+}

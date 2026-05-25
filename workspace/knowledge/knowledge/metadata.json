@@ -1,0 +1,10 @@
+{
+  "created_at": "2026-04-09",
+  "categories": [
+    {"id": "policy", "name": "政策文件", "path": "政策文件"},
+    {"id": "manual", "name": "运营手册", "path": "运营手册"},
+    {"id": "training", "name": "培训资料", "path": "培训资料"},
+    {"id": "other", "name": "其他资料", "path": "其他资料"}
+  ],
+  "documents": []
+}

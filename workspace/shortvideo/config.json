@@ -1,0 +1,8 @@
+{
+  "agent_id": "短视频文案智能体",
+  "name": "短视频文案智能体",
+  "description": "擅长创作短视频脚本和分镜设计",
+  "enabled": true,
+  "enable_search": true,
+  "enable_file_ops": true
+}

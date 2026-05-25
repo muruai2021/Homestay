@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+llama-index
+dashscope
+se-starlette
+jinja2
+aiohttp
+httpx
+pydantic
+python-dotenv
+openai

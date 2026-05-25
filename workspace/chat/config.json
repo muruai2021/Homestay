@@ -1,0 +1,8 @@
+{
+  "agent_id": "运营管理智能体",
+  "name": "运营管理智能体",
+  "description": "数据分析和管理决策支持",
+  "enabled": true,
+  "enable_search": true,
+  "enable_file_ops": true
+}

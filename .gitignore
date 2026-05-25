@@ -1,0 +1,66 @@
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Logs
+*.log
+backend.log
+*.log.*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Test & Cache
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Large Binaries & Generated Files
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.ico
+*.svg
+头像/
+web/avatars/
+
+# Session & Output Data (local workspace state)
+workspace/*/sessions/
+workspace/*/outputs/
+workspace/*/.history.json
+workspace/*/sessions.json
+dashboard/*.json
+dashboard/*.xlsx
+dashboard/*.backup.json
+
+# Deployment
+ecosystem.config.js
+pm2.config.js

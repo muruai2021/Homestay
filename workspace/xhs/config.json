@@ -1,0 +1,8 @@
+{
+  "agent_id": "小红书文案智能体",
+  "name": "小红书文案智能体",
+  "description": "擅长生成小红书种草文案，熟悉平台调性和用户喜好",
+  "enabled": true,
+  "enable_search": true,
+  "enable_file_ops": true
+}

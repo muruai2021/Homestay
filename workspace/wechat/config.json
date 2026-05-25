@@ -1,0 +1,8 @@
+{
+  "agent_id": "公众号文案智能体",
+  "name": "公众号文案智能体",
+  "description": "擅长撰写深度公众号文章，内容有深度有温度",
+  "enabled": true,
+  "enable_search": true,
+  "enable_file_ops": true
+}

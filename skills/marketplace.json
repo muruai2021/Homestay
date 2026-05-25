@@ -1,0 +1,55 @@
+{
+  "name": "AI Matrix 技能市场",
+  "version": "1.0.0",
+  "description": "AI Matrix 智能体技能库索引",
+  "skills": [
+    {
+      "id": "xhs_writer",
+      "name": "小红书文案生成",
+      "category": "content",
+      "tags": ["文案", "种草", "小红书", "民宿"],
+      "agent_ids": ["xhs"],
+      "description": "专为猩伙伴民宿设计的小红书爆款种草文案"
+    },
+    {
+      "id": "wechat_writer",
+      "name": "公众号文案生成",
+      "category": "content",
+      "tags": ["文案", "公众号", "长文"],
+      "agent_ids": ["wechat"],
+      "description": "专业公众号文章生成，支持多种风格"
+    },
+    {
+      "id": "video_script",
+      "name": "短视频脚本生成",
+      "category": "content",
+      "tags": ["视频", "脚本", "短视频"],
+      "agent_ids": ["shortvideo"],
+      "description": "生成吸引人的短视频脚本和分镜"
+    },
+    {
+      "id": "poster_generator",
+      "name": "海报生成",
+      "category": "content",
+      "tags": ["海报", "图片", "视觉"],
+      "agent_ids": ["poster"],
+      "description": "AI 生成精美宣传海报"
+    },
+    {
+      "id": "data_analyzer",
+      "name": "数据分析技能",
+      "category": "analysis",
+      "tags": ["分析", "数据", "统计", "运营"],
+      "agent_ids": ["intelligence", "dashboard"],
+      "description": "民宿运营数据的多维度分析"
+    },
+    {
+      "id": "trend_detector",
+      "name": "趋势洞察",
+      "category": "analysis",
+      "tags": ["趋势", "洞察", "预测"],
+      "agent_ids": ["intelligence"],
+      "description": "行业趋势和客户需求变化洞察"
+    }
+  ]
+}

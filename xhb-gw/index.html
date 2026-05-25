@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>猩伙伴民宿 - 让每一次停留都成为风景</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <img src="images/logo.jpg" alt="猩伙伴" class="logo-img">
+        <span class="logo-text">猩伙伴</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="菜单">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html" class="active">首页</a></li>
+        <li><a href="#communities">房源小区</a></li>
+        <li><a href="#featured">精选房源</a></li>
+        <li><a href="#about">关于我们</a></li>
+        <li><a href="#contact">联系我们</a></li>
+        <li><a href="/ai" target="_blank" class="ai-link">AI管理平台</a></li>
+        <li><a href="#" class="admin-link" id="adminLoginBtn">管理</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" style="background-image: url('images/hero.jpg');">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">猩伙伴</h1>
+      <p class="hero-subtitle">让每一次停留都成为风景</p>
+      <p class="hero-desc">长沙城市精品美宿，艺术与舒适的完美邂逅</p>
+      <div class="hero-actions">
+        <a href="#communities" class="btn btn-primary">探索房源</a>
+        <a href="tel:15874818550" class="btn btn-outline">电话咨询</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span>向下滑动</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- Communities Section -->
+  <section class="section communities" id="communities">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">房源小区</h2>
+        <p class="section-desc">三大核心区域，21套精品民宿</p>
+      </div>
+      <div class="communities-grid" id="communitiesGrid">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Properties -->
+  <section class="section featured" id="featured">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">精选房源</h2>
+        <p class="section-desc">每一套都是独特的艺术空间</p>
+      </div>
+      <div class="property-scroll" id="propertyScroll">
+        <div class="property-track" id="propertyTrack">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+      <div class="scroll-controls">
+        <button class="scroll-btn prev" id="scrollPrev">&larr;</button>
+        <button class="scroll-btn next" id="scrollNext">&rarr;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="section features">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">品牌特色</h2>
+        <p class="section-desc">为什么选择猩伙伴</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">&#x2728;</div>
+          <h3>国际设计师团队</h3>
+          <p>伦敦艺术大学、格拉斯哥大学等海归设计师亲自操刀，每套房源都是独一无二的艺术品</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#x1F30D;</div>
+          <h3>一线江景体验</h3>
+          <p>推窗可见橘子洲头，俯瞰湘江与城市天际线，晨享水波雾面，暮赏落日熔金</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#x1F4F1;</div>
+          <h3>智能舒适配置</h3>
+          <p>五星定制床品、极米投影仪、定制麻将机，设施齐全，拎包入住</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="section about" id="about">
+    <div class="container">
+      <div class="about-wrapper">
+        <div class="about-content">
+          <div class="about-header">
+            <span class="about-label">ABOUT US</span>
+            <h2 class="about-title">每一处居所，都是一件艺术品</h2>
+          </div>
+          <div class="about-text">
+            <p>猩伙伴民宿集结海归青年设计师集群，在长沙核心地段打造兼具艺术审美与舒适体验的美学生居住所。</p>
+            <p>从建发养云的Loft美学到北辰三角洲的江景大平层，从保利国际广场的橘子洲正对视野到每一处精心布置的软装细节——我们相信，好的住宿不只是睡一觉，而是一段值得收藏的城市记忆。</p>
+          </div>
+          <div class="about-highlights">
+            <div class="about-highlight-item">
+              <div class="about-highlight-icon">&#x2714;</div>
+              <div class="about-highlight-text">
+                <h4>五星级定制床品</h4>
+                <p>独立卫浴 · 极速WiFi · 智能密码锁</p>
+              </div>
+            </div>
+            <div class="about-highlight-item">
+              <div class="about-highlight-icon">&#x2714;</div>
+              <div class="about-highlight-text">
+                <h4>步行可达地铁站</h4>
+                <p>商圈与景区近在咫尺，出行无忧</p>
+              </div>
+            </div>
+            <div class="about-highlight-item">
+              <div class="about-highlight-icon">&#x2714;</div>
+              <div class="about-highlight-text">
+                <h4>艺术美学空间</h4>
+                <p>国际设计师打造，每一处都是风景</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="about-image">
+          <img src="images/hero.jpg" alt="猩伙伴民宿">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section contact" id="contact">
+    <div class="container">
+      <div class="contact-wrapper">
+        <div class="contact-info">
+          <h2>联系我们</h2>
+          <p class="contact-desc">开启您的品质之旅</p>
+          <div class="contact-item">
+            <span class="contact-label">电话</span>
+            <a href="tel:15874818550" class="contact-value">15874818550</a>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">微信</span>
+            <span class="contact-value">同手机号</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">地址</span>
+            <span class="contact-value">长沙市天心区 / 开福区</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">营业时间</span>
+            <span class="contact-value">24小时在线咨询</span>
+          </div>
+        </div>
+        <div class="contact-qr">
+          <div class="qr-placeholder">
+            <span>公众号二维码</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <img src="images/logo.jpg" alt="猩伙伴" class="footer-logo">
+          <span class="footer-name">猩伙伴民宿</span>
+        </div>
+        <div class="footer-links">
+          <a href="index.html">首页</a>
+          <a href="#communities">房源小区</a>
+          <a href="#featured">精选房源</a>
+          <a href="#about">关于我们</a>
+          <a href="admin.html">管理后台</a>
+        </div>
+        <p class="footer-copy">&copy; 2026 猩伙伴民宿 All Rights Reserved</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Community Modal -->
+  <div class="modal" id="communityModal">
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <h3 class="modal-title" id="modalTitle"></h3>
+      <p class="modal-subtitle" id="modalSubtitle"></p>
+      <div class="modal-properties" id="modalProperties">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Chat Widget -->
+  <div class="chat-widget" id="chatWidget">
+    <button class="chat-toggle" id="chatToggle">
+      <span class="chat-icon">&#x1F4AC;</span>
+      <span class="chat-pulse"></span>
+    </button>
+    <div class="chat-box" id="chatBox">
+      <div class="chat-header">
+        <h4>猩伙伴AI客服</h4>
+        <button class="chat-close" id="chatClose">&times;</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="message bot">
+          <p>您好！我是猩伙伴AI客服，请问有什么可以帮助您的？</p>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <input type="text" class="chat-input" id="chatInput" placeholder="输入您的问题...">
+        <button class="chat-send" id="chatSend">发送</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+
+  <!-- Admin Login Modal -->
+  <div class="modal" id="adminLoginModal">
+    <div class="modal-overlay" id="adminModalOverlay"></div>
+    <div class="modal-content admin-login-modal">
+      <button class="modal-close" id="adminLoginClose">&times;</button>
+      <h3 class="modal-title">管理员登录</h3>
+      <form id="adminLoginForm">
+        <div class="form-group">
+          <label class="form-label">手机号</label>
+          <input type="tel" class="form-input" id="adminPhone" placeholder="请输入手机号" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">密码</label>
+          <input type="password" class="form-input" id="adminPassword" placeholder="请输入密码" required>
+        </div>
+        <button type="submit" class="btn-login">登录</button>
+      </form>
+      <p style="text-align: center; margin-top: 15px; color: var(--text-muted); font-size: 0.85rem;">
+        初始账号: 15874818550 / 密码: 123456
+      </p>
+    </div>
+  </div>
+</body>
+</html>

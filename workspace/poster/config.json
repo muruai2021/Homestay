@@ -1,0 +1,8 @@
+{
+  "agent_id": "海报生成智能体",
+  "name": "海报生成智能体",
+  "description": "擅长设计海报和视觉内容生成",
+  "enabled": true,
+  "enable_search": true,
+  "enable_file_ops": true
+}

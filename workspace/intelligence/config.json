@@ -1,0 +1,8 @@
+{
+  "agent_id": "情报洞察智能体",
+  "name": "情报洞察智能体",
+  "description": "擅长联网搜索和行业洞察分析",
+  "enabled": true,
+  "enable_search": true,
+  "enable_file_ops": true
+}
