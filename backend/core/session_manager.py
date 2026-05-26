@@ -1,6 +1,7 @@
 """会话管理器模块 - 支持 JSON 格式、多会话、时间戳"""
 import json
 import uuid
+import atexit
 from pathlib import Path
 from datetime import datetime
 from typing import List, Dict, Optional
@@ -26,6 +27,11 @@ class SessionManager:
         self._pending_writes: Dict[str, tuple] = {}  # session_id -> (session_data, timestamp)
         self._write_interval = self._default_write_interval
         self._last_write_time: Dict[str, float] = {}  # session_id -> last flush time
+
+    def __del__(self):
+        """析构函数：确保待写入数据被保存到磁盘"""
+        if self._pending_writes:
+            self.flush_pending_writes()
     
     def _ensure_workspace(self):
         """确保工作空间和会话目录存在"""

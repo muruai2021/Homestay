@@ -305,9 +305,9 @@ async def generate_poster_prompts(request: PosterRequest):
         
         full_content = response.choices[0].message.content.strip()
         
-        # 尝试解析 JSON
+        # 尝试解析 JSON（使用非贪婪匹配避免贪婪问题）
         import re
-        json_match = re.search(r'\{[\s\S]*\}', full_content)
+        json_match = re.search(r'\{[\s\S]*?\}', full_content)
         if json_match:
             prompts = json.loads(json_match.group())
             return {

@@ -22,35 +22,40 @@ GREETING_PATTERNS = [
     r"^(你好|您好|hi|hey|hello|嗨|哈喽|在吗|帮忙)\s*$",
 ]
 
-# Prompt 注入模式 - 增强版
+# Prompt 注入模式 - 增强版（使用正则锚定减少误报）
 INJECTION_PATTERNS = [
-    # English patterns
-    "ignore previous instructions",
-    "disregard your orders",
-    "forget all previous",
-    "new instructions",
-    "[system prompt]",
-    "override your programming",
-    "disregard your guidelines",
-    "you are now",
-    "act as",
-    "pretend you are",
-    "developer mode",
-    "jailbreak",
-    # Chinese patterns
-    "忘掉所有",
-    "你现在是",
-    "你是一个",
-    "忽略之前",
-    "无视之前",
-    "请扮演",
-    "你现在扮演",
-    "系统提示",
-    "忽略系统",
-    "打破规则",
-    "绕过限制",
-    "请忽略",
-    "不要遵循",
+    # English patterns - 使用单词边界避免误报
+    r"\bignore\s+previous\s+instructions\b",
+    r"\bdisregard\s+your\s+orders\b",
+    r"\bforget\s+all\s+previous\b",
+    r"\bnew\s+instructions\b",
+    r"\[system\s+prompt\]",
+    r"\boverride\s+your\s+programming\b",
+    r"\bdisregard\s+your\s+guidelines\b",
+    r"\byou\s+are\s+now\b",
+    r"\bact\s+as\b",
+    r"\bpretend\s+you\s+are\b",
+    r"\bdeveloper\s+mode\b",
+    r"\bjailbreak\b",
+    # Chinese patterns - 使用更精确的匹配
+    r"^忘掉所有",
+    r"^你现在是",
+    r"^你是一个",
+    r"^忽略之前",
+    r"^无视之前",
+    r"^请扮演",
+    r"^你现在扮演",
+    r"^系统提示",
+    r"^忽略系统",
+    r"打破规则",
+    r"绕过限制",
+    r"^请忽略",
+    r"不要遵循",
+    # 常见注入变体
+    r"\bignore\s+all\s+previous\b",
+    r"\bdisregard\s+all\s+instructions\b",
+    r"\bforget\s+your\s+instructions\b",
+    r"\bignore\s+your\s+directives\b",
 ]
 
 
@@ -64,9 +69,18 @@ def is_greeting(text: str) -> bool:
 
 
 def has_injection(text: str) -> bool:
-    """检测 Prompt 注入攻击"""
+    """检测 Prompt 注入攻击（使用正则锚定减少误报）"""
     text_lower = text.lower()
-    return any(p.lower() in text_lower for p in INJECTION_PATTERNS)
+    for pattern in INJECTION_PATTERNS:
+        # 尝试编译为正则表达式
+        try:
+            if re.search(pattern, text_lower, re.IGNORECASE):
+                return True
+        except re.error:
+            # 如果编译失败，使用简单的字符串匹配作为后备
+            if pattern.lower() in text_lower:
+                return True
+    return False
 
 
 def sanitize_input(text: str) -> str:
