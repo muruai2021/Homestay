@@ -37,7 +37,7 @@ INJECTION_PATTERNS = [
     r"\bpretend\s+you\s+are\b",
     r"\bdeveloper\s+mode\b",
     r"\bjailbreak\b",
-    # Chinese patterns - 使用更精确的匹配
+    # Chinese patterns - 使用更精确的匹配（带行首锚点）
     r"^忘掉所有",
     r"^你现在是",
     r"^你是一个",
@@ -47,10 +47,10 @@ INJECTION_PATTERNS = [
     r"^你现在扮演",
     r"^系统提示",
     r"^忽略系统",
-    r"打破规则",
-    r"绕过限制",
+    r"^打破规则",
+    r"^绕过限制",
     r"^请忽略",
-    r"不要遵循",
+    r"^不要遵循",
     # 常见注入变体
     r"\bignore\s+all\s+previous\b",
     r"\bdisregard\s+all\s+instructions\b",
@@ -72,14 +72,17 @@ def has_injection(text: str) -> bool:
     """检测 Prompt 注入攻击（使用正则锚定减少误报）"""
     text_lower = text.lower()
     for pattern in INJECTION_PATTERNS:
-        # 尝试编译为正则表达式
         try:
             if re.search(pattern, text_lower, re.IGNORECASE):
                 return True
         except re.error:
-            # 如果编译失败，使用简单的字符串匹配作为后备
-            if pattern.lower() in text_lower:
-                return True
+            # 如果编译失败，尝试去除锚点后做字符串匹配
+            # 但仅当原始模式以 ^ 开头时才使用前缀匹配
+            if pattern.startswith("^"):
+                prefix = pattern.lstrip("^")
+                if prefix.lower() in text_lower:
+                    return True
+            # 其他无效模式直接跳过
     return False
 
 
@@ -215,8 +218,8 @@ async def agent_chat(request: AgentChatRequest):
 
                 # 保存对话记录
                 full_content = "".join(full_content_list)
-                session_mgr.add_message("user", user_input)
-                session_mgr.add_message("assistant", full_content)
+                await session_mgr.add_message("user", user_input)
+                await session_mgr.add_message("assistant", full_content)
 
                 # 标记成功
                 mark_provider_success(AI_PROVIDER)
@@ -283,8 +286,8 @@ async def agent_generate(request: AgentGenerateRequest):
 
                 # 保存对话记录
                 full_content = "".join(full_content_list)
-                session_mgr.add_message("user", request.prompt)
-                session_mgr.add_message("assistant", full_content)
+                await session_mgr.add_message("user", request.prompt)
+                await session_mgr.add_message("assistant", full_content)
 
                 # 生成模式：自动保存文件
                 file_mgr = FileManager(agent_name)
@@ -319,7 +322,7 @@ async def _poster_generate(request: AgentGenerateRequest, agent_name: str):
         try:
             # 1. 保存用户消息
             session_mgr = SessionManager(agent_name)
-            session_mgr.add_message("user", request.prompt)
+            await session_mgr.add_message("user", request.prompt)
             
             # 2. 构建海报生成提示词（使用 Skill 增强）
             from core.skill_base import SkillLoader
@@ -391,7 +394,7 @@ async def _poster_generate(request: AgentGenerateRequest, agent_name: str):
                 yield f"💾 已自动保存到 workspace/{agent_name}/outputs/\n"
                 
                 # 保存到会话
-                session_mgr.add_message("assistant", 
+                await session_mgr.add_message("assistant",
                     f"✨ 海报生成成功！\\n风格：{style}\\n图片：{image_url}")
                 
                 mark_provider_success(AI_PROVIDER)
@@ -401,7 +404,7 @@ async def _poster_generate(request: AgentGenerateRequest, agent_name: str):
                 if "API_KEY" in error or "未配置" in error:
                     yield f"⚠️ 请检查 .env 文件中的 DASHSCOPE_API_KEY 配置\n"
                 
-                session_mgr.add_message("assistant", f"海报生成失败：{error}")
+                await session_mgr.add_message("assistant", f"海报生成失败：{error}")
                 mark_provider_error(AI_PROVIDER)
                 
         except Exception as e:
@@ -489,7 +492,7 @@ async def save_chat_to_sessions(agent_id: str, request: SaveChatRequest):
         # 添加每条消息到历史
         for msg in request.messages:
             if "role" in msg and "content" in msg:
-                session_mgr.add_message(msg["role"], msg["content"])
+                await session_mgr.add_message(msg["role"], msg["content"])
 
         return {
             "success": True,

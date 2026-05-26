@@ -187,19 +187,28 @@
     </div>
 
     <script>
-        // 员工密码（可改为后端验证）
-        const STAFF_PASSWORD = '123456';
-
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const password = document.getElementById('password').value;
 
-            if (password === STAFF_PASSWORD) {
-                // 登录成功，保存 session
-                sessionStorage.setItem('staffAuth', 'true');
-                // 跳转到 AI 员工页面
-                window.location.href = '/ai/';
-            } else {
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    // 登录成功，保存 session
+                    sessionStorage.setItem('staffAuth', 'true');
+                    // 跳转到 AI 员工页面
+                    window.location.href = '/ai/';
+                } else {
+                    document.getElementById('loginError').classList.add('show');
+                }
+            } catch (err) {
+                console.error('登录请求失败:', err);
                 document.getElementById('loginError').classList.add('show');
             }
         });

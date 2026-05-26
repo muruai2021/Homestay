@@ -55,6 +55,9 @@ if iam_file.exists():
     with open(iam_file, "r", encoding="utf-8") as f:
         IAM_PROMPT = f.read().strip()
 
+# 员工登录密码（从环境变量读取）
+STAFF_PASSWORD = os.environ.get("STAFF_PASSWORD", "")
+
 # 服务器配置
 HOST = "0.0.0.0"
 PORT = 9002

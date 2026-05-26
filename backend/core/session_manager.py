@@ -1,7 +1,7 @@
 """会话管理器模块 - 支持 JSON 格式、多会话、时间戳"""
 import json
 import uuid
-import atexit
+import asyncio
 from pathlib import Path
 from datetime import datetime
 from typing import List, Dict, Optional
@@ -16,6 +16,9 @@ class SessionManager:
 
     # 批量写入间隔（秒）
     _default_write_interval = 1.0
+    # 类级别的异步锁（所有实例共享）
+    _instance_locks: Dict[str, asyncio.Lock] = {}
+    _locks_lock = asyncio.Lock()
 
     def __init__(self, agent_name: str, session_id: str = None):
         self.agent_name = agent_name
@@ -24,14 +27,20 @@ class SessionManager:
         self.session_id = session_id or str(uuid.uuid4())
         self._ensure_workspace()
         # 实例级批量写入配置
-        self._pending_writes: Dict[str, tuple] = {}  # session_id -> (session_data, timestamp)
         self._write_interval = self._default_write_interval
         self._last_write_time: Dict[str, float] = {}  # session_id -> last flush time
+        self._pending_writes: Dict[str, list] = {}  # session_id -> 待写入数据列表
+
+    async def _get_lock(self) -> asyncio.Lock:
+        """获取或创建指定 session_id 的锁"""
+        async with SessionManager._locks_lock:
+            if self.session_id not in SessionManager._instance_locks:
+                SessionManager._instance_locks[self.session_id] = asyncio.Lock()
+            return SessionManager._instance_locks[self.session_id]
 
     def __del__(self):
         """析构函数：确保待写入数据被保存到磁盘"""
-        if self._pending_writes:
-            self.flush_pending_writes()
+        pass  # 异步锁无法在析构函数中正确处理
     
     def _ensure_workspace(self):
         """确保工作空间和会话目录存在"""
@@ -55,12 +64,13 @@ class SessionManager:
             "messages": []
         }
     
-    def _save_session(self, session_data: Dict, immediate: bool = False):
-        """保存当前会话
+    async def _save_session(self, session_data: Dict, immediate: bool = False, lock_held: bool = False):
+        """保存当前会话（异步版本）
 
         Args:
             session_data: 会话数据
             immediate: 是否立即写入（默认False，使用批量写入）
+            lock_held: 调用方是否已持有锁（避免重复加锁）
         """
         import time
         session_data["updated_at"] = datetime.now().isoformat()
@@ -76,36 +86,41 @@ class SessionManager:
                 json.dump(session_data, f, ensure_ascii=False, indent=2)
             self._last_write_time[session_id] = current_time
         else:
-            # 记录待写入数据，下次批量写入
-            self._pending_writes[session_id] = (session_data, current_time)
+            # 记录待写入数据（使用列表避免覆盖）
+            if session_id not in self._pending_writes:
+                self._pending_writes[session_id] = []
+            self._pending_writes[session_id].append((session_data, current_time))
 
-    def flush_pending_writes(self):
+    async def flush_pending_writes(self):
         """强制写入所有待处理的会话数据"""
-        for session_id, (session_data, timestamp) in list(self._pending_writes.items()):
-            session_file = self.sessions_dir / f"{session_id}.json"
-            with open(session_file, "w", encoding="utf-8") as f:
-                json.dump(session_data, f, ensure_ascii=False, indent=2)
-            self._last_write_time[session_id] = timestamp
-        self._pending_writes.clear()
+        async with await self._get_lock():
+            for session_id, writes in list(self._pending_writes.items()):
+                for session_data, timestamp in writes:
+                    session_file = self.sessions_dir / f"{session_id}.json"
+                    with open(session_file, "w", encoding="utf-8") as f:
+                        json.dump(session_data, f, ensure_ascii=False, indent=2)
+                    self._last_write_time[session_id] = timestamp
+            self._pending_writes.clear()
     
-    def add_message(self, role: str, content: str):
+    async def add_message(self, role: str, content: str):
         """
         添加对话消息
-        
+
         Args:
             role: 角色 ("user" 或 "assistant")
             content: 消息内容
         """
-        session_data = self._load_session()
-        
-        message = {
-            "role": role,
-            "content": content,
-            "timestamp": datetime.now().isoformat()
-        }
-        
-        session_data["messages"].append(message)
-        self._save_session(session_data)
+        async with await self._get_lock():
+            session_data = self._load_session()
+
+            message = {
+                "role": role,
+                "content": content,
+                "timestamp": datetime.now().isoformat()
+            }
+
+            session_data["messages"].append(message)
+            await self._save_session(session_data)
     
     def get_history(self, limit: int = 10) -> List[Dict]:
         """
@@ -138,10 +153,13 @@ class SessionManager:
         return [{"role": m["role"], "content": m["content"]} for m in messages]
     
     def clear_history(self):
-        """清除当前会话历史"""
+        """清除当前会话历史（同步版本）"""
         session_data = self._load_session()
         session_data["messages"] = []
-        self._save_session(session_data)
+        session_data["updated_at"] = datetime.now().isoformat()
+        # 同步直接写入，避免异步复杂性
+        with open(self.session_file, "w", encoding="utf-8") as f:
+            json.dump(session_data, f, ensure_ascii=False, indent=2)
     
     def list_sessions(self) -> List[Dict]:
         """

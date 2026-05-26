@@ -64,8 +64,8 @@ async def _call_generate_stream(agent_id: str, prompt: str, task_description: st
 
             full_content = "".join(full_content_list)
             # 保存对话记录
-            session_mgr.add_message("user", prompt)
-            session_mgr.add_message("assistant", full_content)
+            await session_mgr.add_message("user", prompt)
+            await session_mgr.add_message("assistant", full_content)
             
             # 生成模式：自动保存文件到 workspace/{agent_id}/outputs/
             file_mgr = FileManager(agent_id)
@@ -161,9 +161,9 @@ async def chat(request: ChatRequest):
                         yield content
 
                 full_content = "".join(full_content_list)
-                
-                session_mgr.add_message("user", request.message)
-                session_mgr.add_message("assistant", full_content)
+
+                await session_mgr.add_message("user", request.message)
+                await session_mgr.add_message("assistant", full_content)
                 mark_provider_success("default")
             except Exception as e:
                 mark_provider_error("default")
